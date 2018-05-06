@@ -104,3 +104,6 @@ ENV/
 #ignore Decision Tree files
 Decision_Tree
 Decision_Tree.pdf
+
+#Ignore Results Directory
+Results/

@@ -6,6 +6,7 @@ import DecisionTree
 import kNN
 import BPNN
 import csv
+import os
 
 #Print out information on how to run the program
 def printHelp():
@@ -131,15 +132,30 @@ loadDataset(filename,split,cols,X_train,y_train,X_test,y_test);
 collapseClassifications(collapseType,y_train,y_test);
 
 if algorithim == 'clustering' or algorithim == 'Clustering':
+	algorithim_name = 'Clustering'
 	accuracy,classifier = clustering.run(X_train,y_train,X_test,y_test);
 elif algorithim == 'DecisionTree' or algorithim == 'DT':
+	algorithim_name = 'DecisionTree'
 	accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,False);
 elif algorithim == 'kNN' or algorithim == 'knn' or algorithim == 'KNN':
+	algorithim_name = 'kNN'
 	accuracy,classifier = kNN.run(X_train,y_train,X_test,y_test);
 elif algorithim == 'BPNN' or algorithim == 'bpnn':
+	algorithim_name = 'BPNN'
 	accuracy,classifier = BPNN.run(X_train,y_train,X_test,y_test);
 else:
 	print("\nAlgorithim was not found\n");
 	sys.exit();
 
-print("\nAccuracy: ",accuracy,"\nClassifier: ",classifier,"\n");
+print('\nAccuracy        : {}'.format(accuracy))
+print('Best Parameters : {}'.format(classifier))
+print("")
+
+drug_name = os.path.splitext(os.path.basename(filename))[0]
+directory = "Results" + os.sep + drug_name + os.sep + algorithim_name + os.sep + str(collapseType) + "_" + str(cols)
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
+with open(os.path.join(directory,'result.txt'), 'w') as file:
+	file.write('Accuracy: ' + str(accuracy) + '\n')
+	file.write('Best Parameters: ' + str(classifier))

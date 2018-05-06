@@ -97,3 +97,10 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#ignore mac meta folder info
+.DS_Store
+
+#ignore Decision Tree files
+Decision_Tree
+Decision_Tree.pdf

@@ -66,7 +66,7 @@ class MPPClassifier(BaseEstimator, ClassifierMixin):
                     distances[i] = np.inf
                 else:
                     distances[i] = -0.5 * mdist * mdist - 0.5 * np.log(np.linalg.det(self.covs_[i])) + np.log(self.priors_[i])
-            print distances
+            #print(distances)
         return max(distances, key=distances.get)
 
     #predict all
@@ -82,13 +82,7 @@ class MPPClassifier(BaseEstimator, ClassifierMixin):
         predicted_X = self.predict(X)
         return accuracy_score(predicted_X,y)*100
 
-def main():
-    X_train = np.random.randint(5, size=(20, 3))
-    y_train = np.random.randint(2, size=20) + 1
-
-    X_test = np.random.randint(5, size=(5, 3))
-    y_test = np.random.randint(2, size=5) + 1
-
+def run(X_train,y_train,X_test,y_test):
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     param_grid = {
                     'case':[1,2,3],
@@ -97,9 +91,7 @@ def main():
     gs.fit(X_train,y_train)
 
     #Test the parameters
-    print "Accuracy:",accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100," Classifier:", gs.best_params_
+    accuracy = accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100;
+    classifier = gs.best_params_;
 
-
-
-if __name__ == "__main__":
-    main()
+    return accuracy,classifier;

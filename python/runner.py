@@ -4,6 +4,7 @@ import sys
 import clustering
 import DecisionTree
 import kNN
+import MPP
 import BPNN
 import csv
 import os
@@ -11,7 +12,7 @@ import os
 #Print out information on how to run the program
 def printHelp():
 	print("\nPlease run the program with the following arguments: runner.py ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE\n");
-	print("Algorithims to Use: Clustering, DecisionTree, KNN, BPNN\n");
+	print("Algorithims to Use: Clustering, DecisionTree, KNN, BPNN, MPP\n");
 	print("Dataset Location: Data_Drug_Consumption/sub_data/\n");
 	print("Classification Collapse Types: \n");
 	print("	0: None, use original classes");
@@ -143,6 +144,9 @@ elif algorithim == 'kNN' or algorithim == 'knn' or algorithim == 'KNN':
 elif algorithim == 'BPNN' or algorithim == 'bpnn':
 	algorithim_name = 'BPNN'
 	accuracy,classifier = BPNN.run(X_train,y_train,X_test,y_test);
+elif algorithim == 'MPP':
+	algorithim_name = 'MPP'
+	accuracy,classifier = MPP.run(X_train,y_train,X_test,y_test);
 else:
 	print("\nAlgorithim was not found\n");
 	sys.exit();

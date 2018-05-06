@@ -66,7 +66,6 @@ class MPPClassifier(BaseEstimator, ClassifierMixin):
                     distances[i] = np.inf
                 else:
                     distances[i] = -0.5 * mdist * mdist - 0.5 * np.log(np.linalg.det(self.covs_[i])) + np.log(self.priors_[i])
-            #print(distances)
         return max(distances, key=distances.get)
 
     #predict all

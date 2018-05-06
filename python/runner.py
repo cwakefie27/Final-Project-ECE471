@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import random
 import sys
@@ -6,8 +7,13 @@ import DecisionTree
 import kNN
 import MPP
 import BPNN
+import MPP
 import csv
 import os
+import sys
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 #Print out information on how to run the program
 def printHelp():
@@ -111,10 +117,10 @@ def collapseClassifications(_type,y_train=[],y_test=[]):
 printHelp();
 
 if len(sys.argv) < 5:
-	print("Not enough arguments given to the program! Please refer to the above help section.\n");
+	print("\nNot enough arguments given to the program! Please refer to the above help section.\n");
 	sys.exit();
 
-print("Running algorithim...\n");
+print("\nRunning algorithim...");
 
 algorithim = sys.argv[1];
 filename = sys.argv[2];
@@ -144,16 +150,16 @@ elif algorithim == 'kNN' or algorithim == 'knn' or algorithim == 'KNN':
 elif algorithim == 'BPNN' or algorithim == 'bpnn':
 	algorithim_name = 'BPNN'
 	accuracy,classifier = BPNN.run(X_train,y_train,X_test,y_test);
-elif algorithim == 'MPP':
+elif algorithim == 'MPP' or algorithim == 'mpp':
 	algorithim_name = 'MPP'
 	accuracy,classifier = MPP.run(X_train,y_train,X_test,y_test);
 else:
 	print("\nAlgorithim was not found\n");
 	sys.exit();
 
-print('\nAccuracy        : {}'.format(accuracy))
-print('Best Parameters : {}'.format(classifier))
-print("")
+eprint('\nAccuracy        : {}'.format(accuracy))
+eprint('Best Parameters : {}'.format(classifier))
+eprint("")
 
 drug_name = os.path.splitext(os.path.basename(filename))[0]
 directory = "Results";

@@ -47,7 +47,7 @@ class kNNClassifier(BaseEstimator, ClassifierMixin):
             else:
                 return class_options[predicted_class[0]]
         else:
-            print "No neighbors were found"
+            print("No neighbors were found")
             sys.exit()
 
     #predict all
@@ -64,13 +64,7 @@ class kNNClassifier(BaseEstimator, ClassifierMixin):
         #print self.k_value,self.minkowski_p,accuracy_score(predicted_X,y)*100
         return accuracy_score(predicted_X,y)*100
 
-def main():
-    X_train = [[np.round(i,decimals=1),np.round(i,decimals=1)] for i in np.arange(0,3,.1)]
-    y_train = [int(i) for i in np.arange(0,3,.1)]
-
-    X_test = [[np.round(i,decimals=1)+.1,np.round(i,decimals=1)-.1] for i in np.arange(0,3,.1)]
-    y_test = [int(i) for i in np.arange(0,3,.1)]
-
+def run(X_train,y_train,X_test,y_test):
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     param_grid = {
                     'k_value':[1,4,5],
@@ -80,8 +74,7 @@ def main():
     gs.fit(X_train,y_train)
 
     #Test the parameters
-    print "Accuracy:",accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100," Classifier:", gs.best_params_
+    accuracy =accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100;
+    classifier = gs.best_params_;
 
-
-if __name__ == "__main__":
-    main()
+    return accuracy,classifier;

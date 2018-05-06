@@ -97,13 +97,7 @@ class clusteringClassifier(BaseEstimator, ClassifierMixin):
         #print predicted_X,y
         return accuracy_score(predicted_X,y)*100
 
-def main():
-    X_train = np.array([[1, 2],[1.5, 1.8],[5, 8 ],[8, 8],[1, 0.6],[9,11]])
-    y_train = [3,3,5,5,3,5]
-
-    X_test = [[1,2],[6,7]]
-    y_test = [3,5]
-
+def run(X_train,y_train,X_test,y_test):
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     #epsilon is only used for WTA
     param_grid = [
@@ -124,7 +118,7 @@ def main():
     gs = GridSearchCV(clusteringClassifier(), param_grid, cv=2,n_jobs=-1)
     gs.fit(X_train,y_train)
 
-    print "Accuracy:",accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100," Classifier:", gs.best_params_
+    accuracy = accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100;
+    classifier = gs.best_params_;
 
-if __name__ == "__main__":
-    main()
+    return accuracy,classifier

@@ -1,10 +1,14 @@
 import numpy as np
-import sys
-import matplotlib.pyplot as plt
+import random
+from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
 
-class clusteringClassifier:
-    def __init__(self, k_value=2, minkowski_p=2, max_iter=300):
+class clusteringClassifier(BaseEstimator, ClassifierMixin):
+    def __init__(self, algo='kMeans', k_value=2, epsilon=.1, minkowski_p=2, max_iter=300):
+        self.algo = algo
         self.k_value = k_value
+        self.epsilon = epsilon
         self.minkowski_p = minkowski_p
         self.max_iter = max_iter
 
@@ -17,14 +21,8 @@ class clusteringClassifier:
     def _assign_to_centroids(self,data):
         centroids_changed = False
         for i in range(0,len(data)):
-            min_distance = np.inf
-            centroid_assignment_index = -1
-
-            for j in range(0,len(self.centroids_)):
-                distance = self._minkowski_distance(data[i],self.centroids_[j])
-                if (distance < min_distance):
-                    centroid_assignment_index = j
-                    min_distance = distance
+            #Find the closest centroid
+            centroid_assignment_index = np.argmin([self._minkowski_distance(data[i],self.centroids_[j]) for j in range(0,len(self.centroids_))])
 
             if (self.data_centroid_indexes_[i] != centroid_assignment_index):
                 centroids_changed = True
@@ -32,8 +30,7 @@ class clusteringClassifier:
 
         return centroids_changed
 
-
-    def _adjust_centroids(self,data):
+    def _adjust_centroids_kMeans(self,data):
         self.centroids_[:] = 0
         count = np.zeros(len(self.centroids_))
         for data_index,centroid_index in enumerate(self.data_centroid_indexes_):
@@ -42,39 +39,92 @@ class clusteringClassifier:
         #Divide by the count to adjust centroids
         self.centroids_ = self.centroids_/count.reshape((len(count),1))
 
-    def fit(self,data):
-        #Assign centroid data indexes
-        self.centroids_ = np.array([np.array(data[i]) for i in np.random.randint(low=0, high=len(data), size=self.k_value)])
-        self.data_centroid_indexes_ = [0] * len(data)
+    def _adjust_centroids_WTA(self,data):
+        for i in range(0,len(data)):
+            w_old = self.centroids_[self.data_centroid_indexes_[i]];
+            self.centroids_[self.data_centroid_indexes_[i]] = w_old + (data[i] - w_old) * self.epsilon;
 
-        while self._assign_to_centroids(data) == True :
-            self._adjust_centroids(data)
+    def fit(self,X,y):
+        assert self.k_value <= len(X), "Number of centroids is greater than number of instances in data"
+
+        #Assign Centroids random values in data
+        self.centroids_ = np.array([np.array(X[i]) for i in random.sample(range(len(X)), self.k_value)])
+        self.data_centroid_indexes_ = [0] * len(X)
+
+        iterations = 0
 
 
+        if self.algo == 'kMeans':
+            while self._assign_to_centroids(X) == True and iterations < self.max_iter:
+                self.epsilon = -1
+                self._adjust_centroids_kMeans(X)
+                iterations += 1
+        elif self.algo == 'WTA':
+            while iterations < self.max_iter:
+                self._assign_to_centroids(X)
+                self._adjust_centroids_WTA(X)
+                iterations += 1
+
+        #associate each centroid with a class by voting for the most frequent class in each centroid
+        unique_classes = np.unique(y)
+        class_votes = np.zeros((len(self.centroids_),len(unique_classes)),dtype=int)
+        for index,class_value in zip(self.data_centroid_indexes_,y):
+            class_votes[index][np.where(unique_classes==class_value)[0][0]] += 1
+
+        self.centroid_classes_ = [unique_classes[np.argmax(vote)] for vote in class_votes]
+
+    def _predict_isntance(self, point):
+        #find the closest centroid then use it to key into the centroids class
+        closest_centroid = np.argmin([self._minkowski_distance(point,self.centroids_[i]) for i in range(0,len(self.centroids_))])
+        return self.centroid_classes_[closest_centroid]
+
+    #predict all
+    def predict(self, X):
+        try:
+            getattr(self, "centroid_classes_")
+        except AttributeError:
+            raise RuntimeError("Fit the classifier before using it")
+
+        return([self._predict_isntance(x) for x in X])
+
+    def score(self, X, y):
+        try:
+            getattr(self, "centroid_classes_")
+        except AttributeError:
+            raise RuntimeError("Must know the classes of the data in order to score each configuration")
+
+        predicted_X = self.predict(X)
+        #print predicted_X,y
+        return accuracy_score(predicted_X,y)*100
 
 def main():
-    X_train = np.array([[1, 2],
-                  [1.5, 1.8],
-                  [5, 8 ],
-                  [8, 8],
-                  [1, 0.6],
-                  [9,11]])
+    X_train = np.array([[1, 2],[1.5, 1.8],[5, 8 ],[8, 8],[1, 0.6],[9,11]])
+    y_train = [3,3,5,5,3,5]
 
-    plt.scatter(X_train[:,0], X_train[:,1])
-    #plt.show()
+    X_test = [[1,2],[6,7]]
+    y_test = [3,5]
 
-    clf = clusteringClassifier(k_value=2,minkowski_p=2,max_iter=300)
-    clf.fit(X_train)
+    #Find the best parameters using GridSearchCV -- SPECIFY param_grid
+    #epsilon is only used for WTA
+    param_grid = [
+            {
+                'algo':['kMeans'],
+                'k_value': [1,2],
+                'minkowski_p':[1,2,np.inf],
+                'max_iter': [10]
+            },
+            {
+                'algo':['kMeans','WTA'],
+                'epsilon': [.00001],
+                'k_value': [1,2],
+                'minkowski_p':[1,2,np.inf],
+                'max_iter': [10]
+            }
+                 ]
+    gs = GridSearchCV(clusteringClassifier(), param_grid, cv=2,n_jobs=-1)
+    gs.fit(X_train,y_train)
 
-    print clf.centroids_
-
-
-
-
-
-
-
-
+    print "Accuracy:",accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100," Classifier:", gs.best_params_
 
 if __name__ == "__main__":
     main()

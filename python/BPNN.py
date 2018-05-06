@@ -11,7 +11,8 @@ def main():
     y_test = [int(i) for i in np.arange(0,3,.1)]
 
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
-    param_grid ={  'activation' : ['identity', 'logistic', 'tanh', 'relu'],
+    param_grid ={
+                    'activation' : ['identity', 'logistic', 'tanh', 'relu'],
                     'solver' : ['adam','lbfgs'],
                     'alpha' : [0.0001],
                     'batch_size': ['auto'],

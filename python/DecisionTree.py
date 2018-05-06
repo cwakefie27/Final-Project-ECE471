@@ -15,7 +15,10 @@ def main():
     class_names = ['0','1','2']
 
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
-    param_grid = {'criterion':['gini','entropy'],'max_depth': np.arange(3, 10)}
+    param_grid = {
+                    'criterion':['gini','entropy'],
+                    'max_depth': np.arange(3, 10)
+                 }
     gs = GridSearchCV(tree.DecisionTreeClassifier(), param_grid, cv=10,n_jobs=-1,scoring='accuracy')
     gs.fit(X_train,y_train)
 

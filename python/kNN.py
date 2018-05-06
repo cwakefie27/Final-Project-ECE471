@@ -51,7 +51,7 @@ class kNNClassifier(BaseEstimator, ClassifierMixin):
             sys.exit()
 
     #predict all
-    def predict(self, X, y=None):
+    def predict(self, X):
         try:
             getattr(self, "data_")
         except AttributeError:
@@ -72,8 +72,11 @@ def main():
     y_test = [int(i) for i in np.arange(0,3,.1)]
 
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
-    param_grid = {'k_value':[1,4,5], 'minkowski_p':[1,2,3,np.inf]}
-    gs = GridSearchCV(kNNClassifier(k_value=2), param_grid,cv=10,n_jobs=-1)
+    param_grid = {
+                    'k_value':[1,4,5],
+                    'minkowski_p':[1,2,3,np.inf]
+                 }
+    gs = GridSearchCV(kNNClassifier(), param_grid,cv=10,n_jobs=-1)
     gs.fit(X_train,y_train)
 
     #Test the parameters

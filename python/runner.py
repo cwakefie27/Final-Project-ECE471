@@ -152,10 +152,16 @@ print('Best Parameters : {}'.format(classifier))
 print("")
 
 drug_name = os.path.splitext(os.path.basename(filename))[0]
-directory = "Results" + os.sep + drug_name + os.sep + algorithim_name + os.sep + str(collapseType) + "_" + str(cols)
+directory = "Results";
 if not os.path.exists(directory):
     os.makedirs(directory)
 
-with open(os.path.join(directory,'result.txt'), 'w') as file:
-	file.write('Accuracy: ' + str(accuracy) + '\n')
-	file.write('Best Parameters: ' + str(classifier))
+string = "";
+with open(os.path.join(directory,algorithim_name+'.csv'), 'a') as file:
+	string = drug_name;
+	string = string + ',' + (str(collapseType)).replace(',','');
+	string = string + ',' + (str(cols)).replace(',','');
+	string = string + ',' + (str(accuracy)).replace(',','');
+	string = string + ',' + (str(classifier)).replace(',','');
+
+	file.write(string+"\n");

@@ -9,6 +9,7 @@ import MPP
 import BPNN
 import MPP
 import PCA
+import FLD
 import csv
 import os
 import sys
@@ -18,18 +19,18 @@ def eprint(*args, **kwargs):
 
 #Print out information on how to run the program
 def printHelp():
-	print("\nPlease run the program with the following arguments: runner.py REDUCTION_METHOD ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE\n");
-	print("Reductions to Use: None PCA FLD \n");
-	print("Algorithims to Use: Clustering, DecisionTree, KNN, BPNN, MPP\n");
-	print("Dataset Location: Data_Drug_Consumption/sub_data/\n");
-	print("Classification Collapse Types: \n");
-	print("	0: None, use original classes");
-	print("	1: Collapse to 2 classes. (0: Never used, 1: Used at somepoint)");
-	print("	2: Collapse to 3 classes. (0: Never used, 1: Used over a decade ago, 2: Used within the decade)");
-	print("	3: Collapse to 3 classes. (0: Never used, 1: Used over a year ago, 2: Used within the year)");
-	print("\n");
-	print("Columns To Use: Please provide a comma seperated string of column indices to use. NO SPACES! ex: 0,3,4 to use the columns 0, 3, and 4.")
-	print("	Put -1 to use all columns")
+	print("\nPlease run the program with the following arguments: runner.py REDUCTION_METHOD ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE");
+	print("\tReductions to Use             : None PCA FLD");
+	print("\tAlgorithims to Use            : Clustering, DecisionTree, KNN, BPNN, MPP");
+	print("\tDataset Location              : Data_Drug_Consumption/sub_data/");
+	print("\tClassification Collapse Types : 0 1 2 3");
+	print("\t\t0: None, use original classes");
+	print("\t\t1: Collapse to 2 classes. (0: Never used, 1: Used at somepoint)");
+	print("\t\t2: Collapse to 3 classes. (0: Never used, 1: Used over a decade ago, 2: Used within the decade)");
+	print("\t\t3: Collapse to 3 classes. (0: Never used, 1: Used over a year ago, 2: Used within the year)");
+	print("\tColumns To Use                : 0-11 -1")
+	print("\t\tPlease provide a comma seperated string of column indices to use. NO SPACES! ex: 0,3,4 to use the columns 0, 3, and 4.")
+	print("\t\tPut -1 to use all columns")
 
 #Split is about what percentage should go to the training set vs testing set
 def loadDataset(filename, split, cols, X_train=[], y_train=[], X_test=[], y_test=[]):
@@ -122,8 +123,6 @@ if len(sys.argv) < 6:
 	print("\nNot enough arguments given to the program! Please refer to the above help section.\n");
 	sys.exit();
 
-print("\nRunning algorithim...");
-
 reduction = sys.argv[1];
 algorithim = sys.argv[2];
 filename = sys.argv[3];
@@ -132,6 +131,7 @@ collapseType = int(sys.argv[4]);
 cols = sys.argv[5].split(',');
 for i in range(len(cols)):
 	cols[i] = int(cols[i]);
+	assert (0 <= cols[i] <= 11), "ERROR: Collumns must be between 0-11"
 
 split = .67;
 X_train = [];
@@ -141,18 +141,18 @@ y_test = [];
 loadDataset(filename,split,cols,X_train,y_train,X_test,y_test);
 collapseClassifications(collapseType,y_train,y_test);
 
+print("\nRunning algorithim...");
+
 if reduction.lower() == 'none' or reduction.lower() == 'no':
 	reduction_method = 'None'
 elif reduction.lower() == 'pca':
 	reduction_method = 'PCA'
 	X_train,X_test = PCA.run(X_train,X_test)
-	# print (X_train,X_test)
-elif reduction.lower() == 'FLD':
+elif reduction.lower() == 'fld':
 	reduction_method = 'FLD'
-	sys.exit();
-	# X_train,X_test =
+	X_train,X_test = FLD.run(X_train,y_train,X_test,y_test)
 else:
-	print("\Reduction method was not found\n");
+	print("\nReduction method was not found\n");
 	sys.exit();
 
 if algorithim.lower() == 'clustering' or algorithim.lower() == 'cluster':
@@ -187,6 +187,7 @@ if not os.path.exists(directory):
 string = "";
 with open(os.path.join(directory,algorithim_name+'.csv'), 'a') as file:
 	string = drug_name;
+	string = string + ',' + (str(reduction_method)).replace(',','');
 	string = string + ',' + (str(collapseType)).replace(',','');
 	string = string + ',' + (str(cols)).replace(',','');
 	string = string + ',' + (str(accuracy)).replace(',','');

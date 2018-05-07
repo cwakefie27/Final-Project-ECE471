@@ -8,6 +8,7 @@ import kNN
 import MPP
 import BPNN
 import MPP
+import PCA
 import csv
 import os
 import sys
@@ -17,7 +18,8 @@ def eprint(*args, **kwargs):
 
 #Print out information on how to run the program
 def printHelp():
-	print("\nPlease run the program with the following arguments: runner.py ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE\n");
+	print("\nPlease run the program with the following arguments: runner.py REDUCTION_METHOD ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE\n");
+	print("Reductions to Use: None PCA FLD \n");
 	print("Algorithims to Use: Clustering, DecisionTree, KNN, BPNN, MPP\n");
 	print("Dataset Location: Data_Drug_Consumption/sub_data/\n");
 	print("Classification Collapse Types: \n");
@@ -116,17 +118,18 @@ def collapseClassifications(_type,y_train=[],y_test=[]):
 
 printHelp();
 
-if len(sys.argv) < 5:
+if len(sys.argv) < 6:
 	print("\nNot enough arguments given to the program! Please refer to the above help section.\n");
 	sys.exit();
 
 print("\nRunning algorithim...");
 
-algorithim = sys.argv[1];
-filename = sys.argv[2];
-collapseType = int(sys.argv[3]);
+reduction = sys.argv[1];
+algorithim = sys.argv[2];
+filename = sys.argv[3];
+collapseType = int(sys.argv[4]);
 
-cols = sys.argv[4].split(',');
+cols = sys.argv[5].split(',');
 for i in range(len(cols)):
 	cols[i] = int(cols[i]);
 
@@ -138,12 +141,26 @@ y_test = [];
 loadDataset(filename,split,cols,X_train,y_train,X_test,y_test);
 collapseClassifications(collapseType,y_train,y_test);
 
-if algorithim.lower() == 'clustering':
+if reduction.lower() == 'none' or reduction.lower() == 'no':
+	reduction_method = 'None'
+elif reduction.lower() == 'pca':
+	reduction_method = 'PCA'
+	X_train,X_test = PCA.run(X_train,X_test)
+	# print (X_train,X_test)
+elif reduction.lower() == 'FLD':
+	reduction_method = 'FLD'
+	sys.exit();
+	# X_train,X_test =
+else:
+	print("\Reduction method was not found\n");
+	sys.exit();
+
+if algorithim.lower() == 'clustering' or algorithim.lower() == 'cluster':
 	algorithim_name = 'Clustering'
 	accuracy,classifier = clustering.run(X_train,y_train,X_test,y_test);
 elif algorithim.lower() == 'decisiontree' or algorithim.lower() == 'dt':
 	algorithim_name = 'DecisionTree'
-	save_decision_tree = True
+	save_decision_tree = False
 	accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType);
 elif algorithim.lower() == 'knn':
 	algorithim_name = 'kNN'

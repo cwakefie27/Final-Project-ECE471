@@ -138,19 +138,20 @@ y_test = [];
 loadDataset(filename,split,cols,X_train,y_train,X_test,y_test);
 collapseClassifications(collapseType,y_train,y_test);
 
-if algorithim == 'clustering' or algorithim == 'Clustering':
+if algorithim.lower() == 'clustering':
 	algorithim_name = 'Clustering'
 	accuracy,classifier = clustering.run(X_train,y_train,X_test,y_test);
-elif algorithim == 'DecisionTree' or algorithim == 'DT':
+elif algorithim.lower() == 'decisiontree' or algorithim.lower() == 'dt':
 	algorithim_name = 'DecisionTree'
 	accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,False);
-elif algorithim == 'kNN' or algorithim == 'knn' or algorithim == 'KNN':
+	# accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,True);
+elif algorithim.lower() == 'knn':
 	algorithim_name = 'kNN'
 	accuracy,classifier = kNN.run(X_train,y_train,X_test,y_test);
-elif algorithim == 'BPNN' or algorithim == 'bpnn':
+elif algorithim.lower() == 'bpnn':
 	algorithim_name = 'BPNN'
 	accuracy,classifier = BPNN.run(X_train,y_train,X_test,y_test);
-elif algorithim == 'MPP' or algorithim == 'mpp':
+elif algorithim.lower()  == 'mpp':
 	algorithim_name = 'MPP'
 	accuracy,classifier = MPP.run(X_train,y_train,X_test,y_test);
 else:

@@ -103,14 +103,14 @@ def run(X_train,y_train,X_test,y_test):
     param_grid = [
             {
                 'algo':['kMeans'],
-                'k_value': [1,2],
+                'k_value': [2],
                 'minkowski_p':[1,2,np.inf],
                 'max_iter': [10]
             },
             {
                 'algo':['kMeans','WTA'],
                 'epsilon': [.00001],
-                'k_value': [1,2],
+                'k_value': [2],
                 'minkowski_p':[1,2,np.inf],
                 'max_iter': [10]
             }

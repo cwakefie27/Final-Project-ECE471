@@ -1,14 +1,9 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix as get_confusion_matrix
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
 import numpy as np
+import performance
 
-def run(X_train,y_train,X_test,y_test):
+def run(X_train,y_train,X_test,y_test,predciction_filename=None):
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     param_grid ={
                     'activation' : ['identity', 'logistic', 'tanh'],
@@ -20,13 +15,6 @@ def run(X_train,y_train,X_test,y_test):
                 }
     gs = GridSearchCV(MLPClassifier(), param_grid, cv=2,n_jobs=-1,scoring='accuracy')
     gs.fit(X_train,y_train)
-
-    classifier = gs.best_params_;
     predicted_classes = gs.best_estimator_.predict(X_test)
-    accuracy = accuracy_score(predicted_classes,y_test);
-    confusion_matrix = get_confusion_matrix(predicted_classes,y_test)
-    precision = precision_score(predicted_classes, y_test, average='macro')
-    recall = recall_score(predicted_classes, y_test, average='macro')
-    f1 = f1_score(predicted_classes, y_test, average='macro')
 
-    return accuracy,classifier,confusion_matrix,precision,recall,f1;
+    return performance.get_results(gs,predicted_classes,y_test,predciction_filename)

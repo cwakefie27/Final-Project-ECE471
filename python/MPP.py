@@ -1,13 +1,10 @@
 from __future__ import print_function
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import confusion_matrix as get_confusion_matrix
 from sklearn.metrics import accuracy_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
 import numpy as np
 import sys
+import performance
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -18,10 +15,6 @@ class MPPClassifier(BaseEstimator, ClassifierMixin):
         self.case = case
 
     def fit(self, X, y, priors=None):
-        if (len(X[0])) == 1:
-            eprint("\nERROR: MPP number of dimensions is equal to 1\n")
-            sys.exit()
-
         X,y = np.array(X),np.array(y)
         # split the data based on class, calculate important info
         data         = {i: X[np.where(y==[i])] for i in np.unique(y)}
@@ -93,20 +86,17 @@ class MPPClassifier(BaseEstimator, ClassifierMixin):
         predicted_X = self.predict(X)
         return accuracy_score(predicted_X,y)
 
-def run(X_train,y_train,X_test,y_test):
+def run(X_train,y_train,X_test,y_test,predciction_filename=None):
+    if (len(X_train[0])) == 1:
+        eprint("\nERROR: MPP number of dimensions is equal to 1\n")
+        sys.exit()
+        
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     param_grid = {
                     'case':[1,2,3],
                  }
-    gs = GridSearchCV(MPPClassifier(), param_grid,cv=4,n_jobs=-1)
+    gs = GridSearchCV(MPPClassifier(), param_grid,cv=4,n_jobs=1)
     gs.fit(X_train,y_train)
-
-    classifier = gs.best_params_;
     predicted_classes = gs.best_estimator_.predict(X_test)
-    accuracy = accuracy_score(predicted_classes,y_test);
-    confusion_matrix = get_confusion_matrix(predicted_classes,y_test)
-    precision = precision_score(predicted_classes, y_test, average='macro')
-    recall = recall_score(predicted_classes, y_test, average='macro')
-    f1 = f1_score(predicted_classes, y_test, average='macro')
 
-    return accuracy,classifier,confusion_matrix,precision,recall,f1;
+    return performance.get_results(gs,predicted_classes,y_test,predciction_filename)

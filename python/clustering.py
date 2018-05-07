@@ -3,11 +3,7 @@ import random
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix as get_confusion_matrix
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
+import performance
 
 class clusteringClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, algo='kMeans', k_value=2, epsilon=.1, minkowski_p=2, max_iter=300):
@@ -41,8 +37,10 @@ class clusteringClassifier(BaseEstimator, ClassifierMixin):
         for data_index,centroid_index in enumerate(self.data_centroid_indexes_):
             self.centroids_[centroid_index] += data[data_index]
             count[centroid_index] += 1
-        #Divide by the count to adjust centroids
-        self.centroids_ = self.centroids_/count.reshape((len(count),1))
+        #Divide by the count to adjust centroids, ensure all values are atleast 1
+        divisor = count.reshape((len(count),1))
+        divisor[divisor <= 0] = 1
+        self.centroids_ = self.centroids_/divisor
 
     def _adjust_centroids_WTA(self,data):
         for i in range(0,len(data)):
@@ -101,7 +99,7 @@ class clusteringClassifier(BaseEstimator, ClassifierMixin):
         #print predicted_X,y
         return accuracy_score(predicted_X,y)
 
-def run(X_train,y_train,X_test,y_test):
+def run(X_train,y_train,X_test,y_test,predciction_filename=None):
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     #epsilon is only used for WTA
     param_grid = [
@@ -121,13 +119,6 @@ def run(X_train,y_train,X_test,y_test):
                  ]
     gs = GridSearchCV(clusteringClassifier(), param_grid, cv=2,n_jobs=-1)
     gs.fit(X_train,y_train)
-
-    classifier = gs.best_params_;
     predicted_classes = gs.best_estimator_.predict(X_test)
-    accuracy = accuracy_score(predicted_classes,y_test);
-    confusion_matrix = get_confusion_matrix(predicted_classes,y_test)
-    precision = precision_score(predicted_classes, y_test, average='macro')
-    recall = recall_score(predicted_classes, y_test, average='macro')
-    f1 = f1_score(predicted_classes, y_test, average='macro')
 
-    return accuracy,classifier,confusion_matrix,precision,recall,f1;
+    return performance.get_results(gs,predicted_classes,y_test,predciction_filename)

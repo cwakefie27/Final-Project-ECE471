@@ -18,6 +18,7 @@ Current Issues:
 3) How to do classifier fusion efficiently
 4) Does MPP have parameters, also there is a chance that a singular matrix occurs during cross validation, if this happens then that particular configuration cannot be predicted so the accuracy score will be zero. Is this correct?
 5) To graph or not graph decision tree is hardcoded
+6) There will potentially be warnings for the performance metrics, ignore them, they do not matter, they come from classes not being predicted
 
 TODO:
 

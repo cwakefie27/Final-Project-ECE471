@@ -183,7 +183,7 @@ def main():
 
 	# Not an error but allows run_experiments.sh to see this output
 	eprint('\nAccuracy         : {}'.format(accuracy))
-	eprint('Best Parameters  :  {}'.format(classifier))
+	eprint('Best Parameters  :  {}\n'.format(classifier))
 	print('Confusion Matrix : \n{}\n'.format(confusion_matrix))
 
 	#Append results

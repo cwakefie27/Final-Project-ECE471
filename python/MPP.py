@@ -98,7 +98,7 @@ def run(X_train,y_train,X_test,y_test):
     param_grid = {
                     'case':[1,2,3],
                  }
-    gs = GridSearchCV(MPPClassifier(), param_grid,cv=2,n_jobs=1)
+    gs = GridSearchCV(MPPClassifier(), param_grid,cv=4,n_jobs=-1)
     gs.fit(X_train,y_train)
 
     classifier = gs.best_params_;

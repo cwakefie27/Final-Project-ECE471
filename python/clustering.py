@@ -107,16 +107,16 @@ def run(X_train,y_train,X_test,y_test):
     param_grid = [
             {
                 'algo':['kMeans'],
-                'k_value': [2],
+                'k_value': [6,8,12],
                 'minkowski_p':[1,2,np.inf],
-                'max_iter': [10]
+                'max_iter': [20]
             },
             {
-                'algo':['kMeans','WTA'],
-                'epsilon': [.00001],
-                'k_value': [2],
+                'algo':['WTA'],
+                'epsilon': [.001],
+                'k_value': [4,8,12],
                 'minkowski_p':[1,2,np.inf],
-                'max_iter': [10]
+                'max_iter': [30]
             }
                  ]
     gs = GridSearchCV(clusteringClassifier(), param_grid, cv=2,n_jobs=-1)

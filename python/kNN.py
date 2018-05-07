@@ -1,5 +1,6 @@
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import GridSearchCV
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix as get_confusion_matrix
 from sklearn.metrics import accuracy_score
@@ -69,12 +70,13 @@ class kNNClassifier(BaseEstimator, ClassifierMixin):
         return accuracy_score(predicted_X,y)
 
 def run(X_train,y_train,X_test,y_test):
+
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     param_grid = {
-                    'k_value':[1,4,5],
-                    'minkowski_p':[1,2,3,np.inf]
+                    'n_neighbors':[5,10,20,40],
+                    'p':[1,2,3,np.inf]
                  }
-    gs = GridSearchCV(kNNClassifier(), param_grid,cv=10,n_jobs=-1)
+    gs = GridSearchCV(KNeighborsClassifier(), param_grid,cv=4,n_jobs=-1)
     gs.fit(X_train,y_train)
 
     classifier = gs.best_params_;

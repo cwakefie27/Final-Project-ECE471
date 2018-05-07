@@ -4,6 +4,10 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix as get_confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
 
 class clusteringClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, algo='kMeans', k_value=2, epsilon=.1, minkowski_p=2, max_iter=300):
@@ -95,7 +99,7 @@ class clusteringClassifier(BaseEstimator, ClassifierMixin):
 
         predicted_X = self.predict(X)
         #print predicted_X,y
-        return accuracy_score(predicted_X,y)*100
+        return accuracy_score(predicted_X,y)
 
 def run(X_train,y_train,X_test,y_test):
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
@@ -120,7 +124,10 @@ def run(X_train,y_train,X_test,y_test):
 
     classifier = gs.best_params_;
     predicted_classes = gs.best_estimator_.predict(X_test)
-    accuracy = accuracy_score(predicted_classes,y_test)*100;
+    accuracy = accuracy_score(predicted_classes,y_test);
     confusion_matrix = get_confusion_matrix(predicted_classes,y_test)
+    precision = precision_score(predicted_classes, y_test, average='macro')
+    recall = recall_score(predicted_classes, y_test, average='macro')
+    f1 = f1_score(predicted_classes, y_test, average='macro')
 
-    return accuracy,classifier,confusion_matrix;
+    return accuracy,classifier,confusion_matrix,precision,recall,f1;

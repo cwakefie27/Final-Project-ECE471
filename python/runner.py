@@ -163,20 +163,20 @@ def main():
 
 	if algorithim.lower() == 'clustering' or algorithim.lower() == 'cluster':
 		algorithim_name = 'Clustering'
-		accuracy,classifier,confusion_matrix = clustering.run(X_train,y_train,X_test,y_test);
+		accuracy,classifier,confusion_matrix,precision,recall,f1 = clustering.run(X_train,y_train,X_test,y_test);
 	elif algorithim.lower() == 'decisiontree' or algorithim.lower() == 'dt':
 		algorithim_name = 'DecisionTree'
 		save_decision_tree = False
-		accuracy,classifier,confusion_matrix = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType);
+		accuracy,classifier,confusion_matrix,precision,recall,f1 = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType);
 	elif algorithim.lower() == 'knn':
 		algorithim_name = 'kNN'
-		accuracy,classifier,confusion_matrix = kNN.run(X_train,y_train,X_test,y_test);
+		accuracy,classifier,confusion_matrix,precision,recall,f1 = kNN.run(X_train,y_train,X_test,y_test);
 	elif algorithim.lower() == 'bpnn':
 		algorithim_name = 'BPNN'
-		accuracy,classifier,confusion_matrix = BPNN.run(X_train,y_train,X_test,y_test);
+		accuracy,classifier,confusion_matrix,precision,recall,f1 = BPNN.run(X_train,y_train,X_test,y_test);
 	elif algorithim.lower()  == 'mpp':
 		algorithim_name = 'MPP'
-		accuracy,classifier,confusion_matrix = MPP.run(X_train,y_train,X_test,y_test);
+		accuracy,classifier,confusion_matrix,precision,recall,f1 = MPP.run(X_train,y_train,X_test,y_test);
 	else:
 		eprint("\nERROR: Algorithim was not found\n");
 		sys.exit();
@@ -201,6 +201,9 @@ def main():
 		string = string + ',' + (str(accuracy)).replace(',','');
 		string = string + ',' + (str(classifier)).replace(',','');
 		string = string + ',' + (str(confusion_matrix.tolist())).replace(',','');
+		string = string + ',' + (str(precision)).replace(',','');
+		string = string + ',' + (str(recall)).replace(',','');
+		string = string + ',' + (str(f1)).replace(',','');
 
 		file.write(string+"\n");
 

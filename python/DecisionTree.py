@@ -3,6 +3,10 @@ from sklearn.metrics import accuracy_score
 from sklearn import tree
 import graphviz
 from sklearn.metrics import confusion_matrix as get_confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
 import numpy as np
 
 def run(X_train,y_train,X_test,y_test,outputGraph=False,collapseType=-1):
@@ -16,8 +20,11 @@ def run(X_train,y_train,X_test,y_test,outputGraph=False,collapseType=-1):
 
     classifier = gs.best_params_;
     predicted_classes = gs.best_estimator_.predict(X_test)
-    accuracy = accuracy_score(predicted_classes,y_test)*100;
+    accuracy = accuracy_score(predicted_classes,y_test);
     confusion_matrix = get_confusion_matrix(predicted_classes,y_test)
+    precision = precision_score(predicted_classes, y_test, average='macro')
+    recall = recall_score(predicted_classes, y_test, average='macro')
+    f1 = f1_score(predicted_classes, y_test, average='macro')
 
     #Save Deceision tree
     if outputGraph == True:
@@ -38,4 +45,4 @@ def run(X_train,y_train,X_test,y_test,outputGraph=False,collapseType=-1):
         graph = graphviz.Source(tree_data)
         graph.render("Decision_Tree")
 
-    return accuracy,classifier,confusion_matrix;
+    return accuracy,classifier,confusion_matrix,precision,recall,f1;

@@ -131,7 +131,7 @@ collapseType = int(sys.argv[4]);
 cols = sys.argv[5].split(',');
 for i in range(len(cols)):
 	cols[i] = int(cols[i]);
-	assert (0 <= cols[i] <= 11), "ERROR: Collumns must be between 0-11"
+	assert (-1 <= cols[i] <= 11), "ERROR: Collumns must be between 0-11"
 
 split = .67;
 X_train = [];
@@ -150,7 +150,7 @@ elif reduction.lower() == 'pca':
 	X_train,X_test = PCA.run(X_train,X_test)
 elif reduction.lower() == 'fld':
 	reduction_method = 'FLD'
-	X_train,X_test = FLD.run(X_train,y_train,X_test,y_test)
+	X_train,X_test = FLD.run(X_train,y_train,X_test)
 else:
 	print("\nReduction method was not found\n");
 	sys.exit();

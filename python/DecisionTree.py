@@ -3,6 +3,7 @@ from sklearn import tree
 import graphviz
 import numpy as np
 import performance
+import sys
 
 def run(X_train,y_train,X_test,y_test,outputGraph=False,collapseType=-1,predciction_filename=None):
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
@@ -27,8 +28,8 @@ def run(X_train,y_train,X_test,y_test,outputGraph=False,collapseType=-1,predcict
     	elif collapseType == 3:
 			class_names = ['Never used','Used over a year ago','Used within the year']
         else:
-            print ("ERROR: Collapse Type specified does not exists")
-            return accuracy,classifier;
+            print ("ERROR: Collapse Type specified does not exists in DT")
+            sys.exit()
 
         feature_names = ['Age','Gender','Education','Country','Ethnicity','Neuroticism','Extraversion','Openness','Agreeableness','Conscientiousness','Impulsiveness','Sensation']
         tree_data = tree.export_graphviz(gs.best_estimator_, out_file=None,feature_names=feature_names, class_names=class_names, filled=True, rounded=True,special_characters=True)

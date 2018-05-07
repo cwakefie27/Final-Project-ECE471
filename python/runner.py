@@ -1,6 +1,7 @@
 from __future__ import print_function
 import numpy as np
 import random
+from datetime import datetime
 import sys
 import clustering
 import DecisionTree
@@ -35,35 +36,35 @@ def printHelp():
 
 #Split is about what percentage should go to the training set vs testing set
 def loadDataset(filename, split, cols, X_train=[], y_train=[], X_test=[], y_test=[]):
-	with open(filename,"rt") as csvfile:
-		reader = csv.reader(csvfile);
-		for row in reader:
-			lin = [];
-			for col in row:
-				lin.append(float(col));
+    with open(filename,"rt") as csvfile:
+        reader = csv.reader(csvfile);
+        for row in reader:
+            lin = [];
+            for col in row:
+                lin.append(float(col));
 
-			line = []
-			#Need to remove some columns
-			if cols[0] != -1:
-				for i in range(len(lin)):
-					found = False;
-					for j in range(len(cols)):
-						if cols[j] == i:
-							found = True;
-							break;
-					#Keep this column
-					if found == True:
-						line.append(lin[i]);
-			else:
-				line = lin[:-1];
+            line = []
+            #Need to remove some columns
+            if cols[0] != -1:
+                for i in range(len(lin)):
+                    found = False;
+                    for j in range(len(cols)):
+                        if cols[j] == i:
+                            found = True;
+                            break;
+                    #Keep this column
+                    if found == True:
+                        line.append(lin[i]);
+            else:
+                line = lin[:-1];
 
-			#Seperate into training and testing based on split variable
-			if random.random() < split:
-				X_train.append(line)
-				y_train.append(lin[-1])
-			else:
-				X_test.append(line)
-				y_test.append(lin[-1])
+            #Seperate into training and testing based on split variable
+            if random.random() < split:
+                X_train.append(line)
+                y_train.append(lin[-1])
+            else:
+                X_test.append(line)
+                y_test.append(lin[-1])
 
 #Collapse the classifications from 7 classes to a more reasonable number
 def collapseClassifications(_type,y_train=[],y_test=[]):
@@ -164,6 +165,12 @@ def main():
 
     collapseType = int(sys.argv[4]);
 
+    if len(sys.argv) > 6 and sys.argv[6][0].lower() == 't':
+        random.seed(1)
+        save_predictions = True
+    else:
+        save_predictions = False
+
     if not ((0 <= collapseType <= 3)):
         eprint("\nERROR: Collapse type must be between 0-3\n")
         sys.exit()
@@ -186,7 +193,8 @@ def main():
     loadDataset(filename,split,cols,X_train,y_train,X_test,y_test);
     collapseClassifications(collapseType,y_train,y_test);
 
-    if len(sys.argv) > 6 and sys.argv[6][0].lower() == 't':
+    if save_predictions == True:
+        random.seed(datetime.now())
         predictions_filename = generate_predictions_filename(drug_name,reduction_name,algorithim_name,collapseType,cols)
     else:
         predictions_filename = None
@@ -206,7 +214,10 @@ def main():
     if algorithim_name.lower() == 'clustering':
         accuracy,classifier,confusion_matrix,precision,recall,f1 = clustering.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
     elif algorithim_name.lower() == 'decisiontree':
-        save_decision_tree = False
+        if reduction_name == 'None' and len(cols) == 1 and cols[0] == -1:
+            save_decision_tree = True
+        else:
+            save_decision_tree = False
         accuracy,classifier,confusion_matrix,precision,recall,f1 = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType,predciction_filename=predictions_filename);
     elif algorithim_name.lower() == 'knn':
         accuracy,classifier,confusion_matrix,precision,recall,f1 = kNN.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);

@@ -17,7 +17,7 @@ def get_results(gs,predicted_classes,y_test,predciction_filename):
     f1 = f1_score(predicted_classes, y_test, average='macro')
 
     if predciction_filename != None:
-        # print ([[predicted,actual] for predicted,actual in zip(predicted_classes,y_test)])
+        prediction_list = [[predicted,actual] for predicted,actual in zip(predicted_classes,y_test)]
 
         #Append results
         directory = "Predictions";
@@ -28,5 +28,8 @@ def get_results(gs,predicted_classes,y_test,predciction_filename):
         with open(os.path.join(directory,predciction_filename), 'w') as file:
             string = predciction_filename;
             file.write(string+"\n");
+
+        header_string = predciction_filename
+        np.savetxt(os.path.join(directory,predciction_filename),prediction_list,'%s',header=header_string,delimiter = ",")
 
     return accuracy,classifier,confusion_matrix,precision,recall,f1;

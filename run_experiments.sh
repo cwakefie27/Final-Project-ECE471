@@ -9,19 +9,23 @@
 # for drug_name in 'alcohol.csv' 'amphet.csv' 'amyl.csv' 'benzos.csv' 'caffeine.csv' 'cannabis.csv' 'chocolate.csv'
 for filename in ./Data_Drug_Consumption/sub_data/*.csv
 do
-   for algorithim_name in 'Clustering' 'DecisionTree' 'kNN' 'BPNN' 'MPP'
+   for reduction_method in 'None' 'FLD' 'PCA'
    do
-      for collapse_type in 0 1 2 3
+      for algorithim_name in 'Clustering' 'DecisionTree' 'kNN' 'BPNN' 'MPP'
       do
-         for columns_to_use in -1
+         for collapse_type in 0 1 2 3
          do
-            echo "<<--- EXPERIMENT --->> "
-            echo " -- Filename       : " $filename
-            echo " -- Algorithim     : " $algorithim_name
-            echo " -- Collapse Type  : " $collapse_type
-            echo " -- Columns to Use : " $columns_to_use
-            # python python/runner.py $algorithim_name Data_Drug_Consumption/sub_data/$filename $collapse_type $columns_to_use > /dev/null
-            python python/runner.py $algorithim_name $filename $collapse_type $columns_to_use > /dev/null
+            for columns_to_use in 12 -1
+            do
+               echo "<<--- EXPERIMENT --->> "
+               echo " -- Filename       : " $filename
+               echo " -- Reduction      : " $reduction_method
+               echo " -- Algorithim     : " $algorithim_name
+               echo " -- Collapse Type  : " $collapse_type
+               echo " -- Columns to Use : " $columns_to_use
+               # python python/runner.py $algorithim_name Data_Drug_Consumption/sub_data/$filename $collapse_type $columns_to_use > /dev/null
+               python python/runner.py $reduction_method $algorithim_name $filename $collapse_type $columns_to_use > /dev/null
+            done
          done
       done
    done

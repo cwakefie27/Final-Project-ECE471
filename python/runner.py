@@ -120,18 +120,23 @@ def collapseClassifications(_type,y_train=[],y_test=[]):
 printHelp();
 
 if len(sys.argv) < 6:
-	print("\nNot enough arguments given to the program! Please refer to the above help section.\n");
+	eprint("\nERROR: Not enough arguments given to the program! Please refer to the above help section.\n");
 	sys.exit();
 
 reduction = sys.argv[1];
 algorithim = sys.argv[2];
 filename = sys.argv[3];
 collapseType = int(sys.argv[4]);
+if not ((0 <= collapseType <= 3)):
+	eprint("\nERROR: Collapse type must be between 0-3\n")
+	sys.exit()
 
 cols = sys.argv[5].split(',');
 for i in range(len(cols)):
 	cols[i] = int(cols[i]);
-	assert (-1 <= cols[i] <= 11), "ERROR: Collumns must be between 0-11"
+	if not (-1 <= cols[i] <= 11):
+		eprint("\nERROR: Collumns must be between -1-11\n")
+		sys.exit()
 
 split = .67;
 X_train = [];
@@ -152,7 +157,7 @@ elif reduction.lower() == 'fld':
 	reduction_method = 'FLD'
 	X_train,X_test = FLD.run(X_train,y_train,X_test)
 else:
-	print("\nReduction method was not found\n");
+	eprint("\nERROR: Reduction method was not found\n");
 	sys.exit();
 
 if algorithim.lower() == 'clustering' or algorithim.lower() == 'cluster':
@@ -172,12 +177,12 @@ elif algorithim.lower()  == 'mpp':
 	algorithim_name = 'MPP'
 	accuracy,classifier = MPP.run(X_train,y_train,X_test,y_test);
 else:
-	print("\nAlgorithim was not found\n");
+	eprint("\nERROR: Algorithim was not found\n");
 	sys.exit();
 
+# Not an error but allows run_experiments.sh to see this output
 eprint('\nAccuracy        : {}'.format(accuracy))
-eprint('Best Parameters : {}'.format(classifier))
-eprint("")
+eprint('Best Parameters : {}\n'.format(classifier))
 
 drug_name = os.path.splitext(os.path.basename(filename))[0]
 directory = "Results";

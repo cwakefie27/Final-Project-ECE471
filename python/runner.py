@@ -117,85 +117,90 @@ def collapseClassifications(_type,y_train=[],y_test=[]):
 		for i in range(len(y_test)):
 			y_test[i] = int(y_test[i]);
 
-printHelp();
+def main():
+	printHelp();
 
-if len(sys.argv) < 6:
-	eprint("\nERROR: Not enough arguments given to the program! Please refer to the above help section.\n");
-	sys.exit();
+	if len(sys.argv) < 6:
+		eprint("\nERROR: Not enough arguments given to the program! Please refer to the above help section.\n");
+		sys.exit();
 
-reduction = sys.argv[1];
-algorithim = sys.argv[2];
-filename = sys.argv[3];
-collapseType = int(sys.argv[4]);
-if not ((0 <= collapseType <= 3)):
-	eprint("\nERROR: Collapse type must be between 0-3\n")
-	sys.exit()
-
-cols = sys.argv[5].split(',');
-for i in range(len(cols)):
-	cols[i] = int(cols[i]);
-	if not (-1 <= cols[i] <= 11):
-		eprint("\nERROR: Collumns must be between -1-11\n")
+	reduction = sys.argv[1];
+	algorithim = sys.argv[2];
+	filename = sys.argv[3];
+	collapseType = int(sys.argv[4]);
+	if not ((0 <= collapseType <= 3)):
+		eprint("\nERROR: Collapse type must be between 0-3\n")
 		sys.exit()
 
-split = .67;
-X_train = [];
-y_train = [];
-X_test = [];
-y_test = [];
-loadDataset(filename,split,cols,X_train,y_train,X_test,y_test);
-collapseClassifications(collapseType,y_train,y_test);
+	cols = sys.argv[5].split(',');
+	for i in range(len(cols)):
+		cols[i] = int(cols[i]);
+		if not (-1 <= cols[i] <= 11):
+			eprint("\nERROR: Collumns must be between -1-11\n")
+			sys.exit()
 
-print("\nRunning algorithim...");
+	split = .67;
+	X_train = [];
+	y_train = [];
+	X_test = [];
+	y_test = [];
+	loadDataset(filename,split,cols,X_train,y_train,X_test,y_test);
+	collapseClassifications(collapseType,y_train,y_test);
 
-if reduction.lower() == 'none' or reduction.lower() == 'no':
-	reduction_method = 'None'
-elif reduction.lower() == 'pca':
-	reduction_method = 'PCA'
-	X_train,X_test = PCA.run(X_train,X_test)
-elif reduction.lower() == 'fld':
-	reduction_method = 'FLD'
-	X_train,X_test = FLD.run(X_train,y_train,X_test)
-else:
-	eprint("\nERROR: Reduction method was not found\n");
-	sys.exit();
+	print("\nRunning algorithim...");
 
-if algorithim.lower() == 'clustering' or algorithim.lower() == 'cluster':
-	algorithim_name = 'Clustering'
-	accuracy,classifier = clustering.run(X_train,y_train,X_test,y_test);
-elif algorithim.lower() == 'decisiontree' or algorithim.lower() == 'dt':
-	algorithim_name = 'DecisionTree'
-	save_decision_tree = False
-	accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType);
-elif algorithim.lower() == 'knn':
-	algorithim_name = 'kNN'
-	accuracy,classifier = kNN.run(X_train,y_train,X_test,y_test);
-elif algorithim.lower() == 'bpnn':
-	algorithim_name = 'BPNN'
-	accuracy,classifier = BPNN.run(X_train,y_train,X_test,y_test);
-elif algorithim.lower()  == 'mpp':
-	algorithim_name = 'MPP'
-	accuracy,classifier = MPP.run(X_train,y_train,X_test,y_test);
-else:
-	eprint("\nERROR: Algorithim was not found\n");
-	sys.exit();
+	if reduction.lower() == 'none' or reduction.lower() == 'no':
+		reduction_method = 'None'
+	elif reduction.lower() == 'pca':
+		reduction_method = 'PCA'
+		X_train,X_test = PCA.run(X_train,X_test)
+	elif reduction.lower() == 'fld':
+		reduction_method = 'FLD'
+		X_train,X_test = FLD.run(X_train,y_train,X_test)
+	else:
+		eprint("\nERROR: Reduction method was not found\n");
+		sys.exit();
 
-# Not an error but allows run_experiments.sh to see this output
-eprint('\nAccuracy        : {}'.format(accuracy))
-eprint('Best Parameters : {}\n'.format(classifier))
+	if algorithim.lower() == 'clustering' or algorithim.lower() == 'cluster':
+		algorithim_name = 'Clustering'
+		accuracy,classifier = clustering.run(X_train,y_train,X_test,y_test);
+	elif algorithim.lower() == 'decisiontree' or algorithim.lower() == 'dt':
+		algorithim_name = 'DecisionTree'
+		save_decision_tree = False
+		accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType);
+	elif algorithim.lower() == 'knn':
+		algorithim_name = 'kNN'
+		accuracy,classifier = kNN.run(X_train,y_train,X_test,y_test);
+	elif algorithim.lower() == 'bpnn':
+		algorithim_name = 'BPNN'
+		accuracy,classifier = BPNN.run(X_train,y_train,X_test,y_test);
+	elif algorithim.lower()  == 'mpp':
+		algorithim_name = 'MPP'
+		accuracy,classifier = MPP.run(X_train,y_train,X_test,y_test);
+	else:
+		eprint("\nERROR: Algorithim was not found\n");
+		sys.exit();
 
-drug_name = os.path.splitext(os.path.basename(filename))[0]
-directory = "Results";
-if not os.path.exists(directory):
-    os.makedirs(directory)
+	# Not an error but allows run_experiments.sh to see this output
+	eprint('\nAccuracy        : {}'.format(accuracy))
+	eprint('Best Parameters : {}\n'.format(classifier))
 
-string = "";
-with open(os.path.join(directory,algorithim_name+'.csv'), 'a') as file:
-	string = drug_name;
-	string = string + ',' + (str(reduction_method)).replace(',','');
-	string = string + ',' + (str(collapseType)).replace(',','');
-	string = string + ',' + (str(cols)).replace(',','');
-	string = string + ',' + (str(accuracy)).replace(',','');
-	string = string + ',' + (str(classifier)).replace(',','');
+	#Append results
+	drug_name = os.path.splitext(os.path.basename(filename))[0]
+	directory = "Results";
+	if not os.path.exists(directory):
+	    os.makedirs(directory)
 
-	file.write(string+"\n");
+	string = "";
+	with open(os.path.join(directory,algorithim_name+'.csv'), 'a') as file:
+		string = drug_name;
+		string = string + ',' + (str(reduction_method)).replace(',','');
+		string = string + ',' + (str(collapseType)).replace(',','');
+		string = string + ',' + (str(cols)).replace(',','');
+		string = string + ',' + (str(accuracy)).replace(',','');
+		string = string + ',' + (str(classifier)).replace(',','');
+
+		file.write(string+"\n");
+
+if __name__ == "__main__":
+	main()

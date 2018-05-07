@@ -53,7 +53,6 @@ class clusteringClassifier(BaseEstimator, ClassifierMixin):
 
         iterations = 0
 
-
         if self.algo == 'kMeans':
             while self._assign_to_centroids(X) == True and iterations < self.max_iter:
                 self.epsilon = -1

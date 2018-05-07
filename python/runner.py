@@ -143,8 +143,8 @@ if algorithim.lower() == 'clustering':
 	accuracy,classifier = clustering.run(X_train,y_train,X_test,y_test);
 elif algorithim.lower() == 'decisiontree' or algorithim.lower() == 'dt':
 	algorithim_name = 'DecisionTree'
-	accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,False);
-	# accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,True);
+	save_decision_tree = True
+	accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType);
 elif algorithim.lower() == 'knn':
 	algorithim_name = 'kNN'
 	accuracy,classifier = kNN.run(X_train,y_train,X_test,y_test);

@@ -9,8 +9,8 @@ Current Issues:
 2) When should I terminate WTA? Currently, I am just terminating at the max iterations specified.
 3) How to do classifier fusion efficiently
 4) Does MPP have parameters, also there is a chance that a singular matrix occurs during cross validation, if this happens then that particular configuration cannot be predicted so the accuracy score will be zero. Is this correct?
+5) To graph or not graph decision tree is hardcoded
 
 TODO:
 
 1) FLD, Classifier Fusion
-4) Blow brains out, Maybe

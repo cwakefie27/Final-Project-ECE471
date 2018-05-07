@@ -163,27 +163,28 @@ def main():
 
 	if algorithim.lower() == 'clustering' or algorithim.lower() == 'cluster':
 		algorithim_name = 'Clustering'
-		accuracy,classifier = clustering.run(X_train,y_train,X_test,y_test);
+		accuracy,classifier,confusion_matrix = clustering.run(X_train,y_train,X_test,y_test);
 	elif algorithim.lower() == 'decisiontree' or algorithim.lower() == 'dt':
 		algorithim_name = 'DecisionTree'
 		save_decision_tree = False
-		accuracy,classifier = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType);
+		accuracy,classifier,confusion_matrix = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType);
 	elif algorithim.lower() == 'knn':
 		algorithim_name = 'kNN'
-		accuracy,classifier = kNN.run(X_train,y_train,X_test,y_test);
+		accuracy,classifier,confusion_matrix = kNN.run(X_train,y_train,X_test,y_test);
 	elif algorithim.lower() == 'bpnn':
 		algorithim_name = 'BPNN'
-		accuracy,classifier = BPNN.run(X_train,y_train,X_test,y_test);
+		accuracy,classifier,confusion_matrix = BPNN.run(X_train,y_train,X_test,y_test);
 	elif algorithim.lower()  == 'mpp':
 		algorithim_name = 'MPP'
-		accuracy,classifier = MPP.run(X_train,y_train,X_test,y_test);
+		accuracy,classifier,confusion_matrix = MPP.run(X_train,y_train,X_test,y_test);
 	else:
 		eprint("\nERROR: Algorithim was not found\n");
 		sys.exit();
 
 	# Not an error but allows run_experiments.sh to see this output
-	eprint('\nAccuracy        : {}'.format(accuracy))
-	eprint('Best Parameters : {}\n'.format(classifier))
+	eprint('\nAccuracy         : {}'.format(accuracy))
+	eprint('Best Parameters  :  {}'.format(classifier))
+	print('Confusion Matrix : \n{}\n'.format(confusion_matrix))
 
 	#Append results
 	drug_name = os.path.splitext(os.path.basename(filename))[0]
@@ -199,6 +200,7 @@ def main():
 		string = string + ',' + (str(cols)).replace(',','');
 		string = string + ',' + (str(accuracy)).replace(',','');
 		string = string + ',' + (str(classifier)).replace(',','');
+		string = string + ',' + (str(confusion_matrix.tolist())).replace(',','');
 
 		file.write(string+"\n");
 

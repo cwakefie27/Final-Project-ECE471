@@ -1,6 +1,7 @@
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import numpy as np
 
+
 def run(X_train,y_train,X_test):
     #Find optimal n components and retrain FLD
     lda = LinearDiscriminantAnalysis().fit(X_train, y_train)

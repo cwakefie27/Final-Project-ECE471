@@ -3,6 +3,7 @@ import random
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix as get_confusion_matrix
 
 class clusteringClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self, algo='kMeans', k_value=2, epsilon=.1, minkowski_p=2, max_iter=300):
@@ -117,7 +118,9 @@ def run(X_train,y_train,X_test,y_test):
     gs = GridSearchCV(clusteringClassifier(), param_grid, cv=2,n_jobs=-1)
     gs.fit(X_train,y_train)
 
-    accuracy = accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100;
     classifier = gs.best_params_;
+    predicted_classes = gs.best_estimator_.predict(X_test)
+    accuracy = accuracy_score(predicted_classes,y_test)*100;
+    confusion_matrix = get_confusion_matrix(predicted_classes,y_test)
 
-    return accuracy,classifier
+    return accuracy,classifier,confusion_matrix;

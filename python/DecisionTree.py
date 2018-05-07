@@ -2,6 +2,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 from sklearn import tree
 import graphviz
+from sklearn.metrics import confusion_matrix as get_confusion_matrix
 import numpy as np
 
 def run(X_train,y_train,X_test,y_test,outputGraph=False,collapseType=-1):
@@ -13,8 +14,10 @@ def run(X_train,y_train,X_test,y_test,outputGraph=False,collapseType=-1):
     gs = GridSearchCV(tree.DecisionTreeClassifier(), param_grid, cv=10,n_jobs=-1,scoring='accuracy')
     gs.fit(X_train,y_train)
 
-    accuracy = accuracy_score(gs.best_estimator_.predict(X_test),y_test)*100;
     classifier = gs.best_params_;
+    predicted_classes = gs.best_estimator_.predict(X_test)
+    accuracy = accuracy_score(predicted_classes,y_test)*100;
+    confusion_matrix = get_confusion_matrix(predicted_classes,y_test)
 
     #Save Deceision tree
     if outputGraph == True:
@@ -35,4 +38,4 @@ def run(X_train,y_train,X_test,y_test,outputGraph=False,collapseType=-1):
         graph = graphviz.Source(tree_data)
         graph.render("Decision_Tree")
 
-    return accuracy,classifier;
+    return accuracy,classifier,confusion_matrix;

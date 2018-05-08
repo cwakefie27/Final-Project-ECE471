@@ -2,10 +2,10 @@
 
 The goal of this project is to use various machine learning algorithms to classify the below dataset. 10 fold cross validation is used to determine the best parameters and results are gathered on unseen data.
 # Links:
-   Dataset:
+   Dataset:<br>
    http://archive.ics.uci.edu/ml/datasets/Drug+consumption+%28quantified%29  
 
-   Results.csv:
+   Results.csv:<br>
    https://docs.google.com/spreadsheets/d/1E3bBgM-ivO9hUzD8B0ikVWiMWTvuq05GDoG59lepFuY/edit?usp=sharing
 
    Report:  
@@ -17,7 +17,7 @@ https://docs.google.com/presentation/d/1lzonRb6BPj5XVkpVQKUBtOgfzcfdzW76sOFiuFKh
 # Datasets:
 
    Data_Drug_Consumption/sub_data/:  
-   All data used in experiments. Each file contains a particular drug, its features and classification. This was created by stripping it from the original dataset.
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All data used in experiments. Each file contains a particular drug, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;its features and classification. This was created by stripping it from the original dataset.
 
 Features:  
 Personality measurements which include NEO-FFI-R (neuroticism, extraversion, openness to experience, agreeableness, and conscientiousness), BIS-11 (impulsivity), and ImpSS (sensation seeking), level of education, age, gender, country of residence and ethnicity.

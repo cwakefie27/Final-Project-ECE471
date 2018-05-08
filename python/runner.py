@@ -17,7 +17,7 @@ def eprint(*args, **kwargs):
 def printHelp():
     print("\nPlease run the program with the following arguments: runner.py REDUCTION_NAME ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE");
     print("\tReductions to Use             : None PCA FLD");
-    print("\tAlgorithims to Use            : Clustering, DecisionTree, KNN, BPNN, MPP");
+    print("\tAlgorithims to Use            : Clustering, DecisionTree, KNN, BPNN, MPP, SVM, RFC, ABC");
     print("\tDataset Location              : Data_Drug_Consumption/sub_data/");
     print("\tClassification Collapse Types : 0 1 2 3");
     print("\t\t0: None, use original classes");

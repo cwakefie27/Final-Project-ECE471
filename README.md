@@ -29,17 +29,17 @@ Class Labels:<br>
 Params: REDUCTION_NAME ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE (Optional) VERBOSE <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REDUCTION_NAME: PCA, FLD, None <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALGORITHIM_NAME: BPNN, clustering (WTA and kMeans), DecisionTree, kNN, MPP (case1,2,3), SVM, Random forest classifier, AdaBoostClassifier <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATASET_FILENAME: Any file in ... "Data_Drug_Consumption/sub_data"
-COLLAPSE_TYPE: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0: None, use original classes <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1: Collapse to 2 classes. (0: Never used, 1: Used at somepoint)  <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2: Collapse to 3 classes. (0: Never used, 1: Used over a decade ago, 2: Used within the decade)  <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3: Collapse to 3 classes. (0: Never used, 1: Used over a year ago, 2: Used within the year)  <br>
-COLUMNS_TO_USE: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0-11 -1 for all
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0-4  : Personal Info (Age, Gender, Education, Country, Ethnicity)  <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5-11 : Personality Traits (Nscore, Escore, Oscore, Ascore, Cscore, Impulsive, sensation)  <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1   : All <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATASET_FILENAME: Any file in ... "Data_Drug_Consumption/sub_data" <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COLLAPSE_TYPE: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0: None, use original classes <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1: Collapse to 2 classes. (0: Never used, 1: Used at somepoint)  <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2: Collapse to 3 classes. (0: Never used, 1: Used over a decade ago, 2: Used within the decade)  <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3: Collapse to 3 classes. (0: Never used, 1: Used over a year ago, 2: Used within the year)  <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COLUMNS_TO_USE: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0-11 -1 for all
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0-4  : Personal Info (Age, Gender, Education, Country, Ethnicity)  <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5-11 : Personality Traits (Nscore, Escore, Oscore, Ascore, Cscore, Impulsive, sensation)  <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1   : All <br>
 
 VERBOSE: True or False
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True: Save predictions, plot as many graphs as applicable to config

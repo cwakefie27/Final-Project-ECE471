@@ -23,7 +23,7 @@ def eprint(*args, **kwargs):
 
 #Print out information on how to run the program
 def printHelp():
-    print("\nPlease run the program with the following arguments: runner.py reduction_name ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE");
+    print("\nPlease run the program with the following arguments: runner.py REDUCTION_NAME ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE");
     print("\tReductions to Use             : None PCA FLD");
     print("\tAlgorithims to Use            : Clustering, DecisionTree, KNN, BPNN, MPP");
     print("\tDataset Location              : Data_Drug_Consumption/sub_data/");

@@ -31,7 +31,7 @@ Class Labels:
 Params:  
          REDUCTION_NAME ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE  
             REDUCTION_NAME: PCA, FLD, None  
-            ALGORITHIM_NAME: BPNN, clustering (WTA and kMeans), DecisionTree, kNN, MPP, SVM  
+            ALGORITHIM_NAME: BPNN, clustering (WTA and kMeans), DecisionTree, kNN, MPP (case1,2,3), SVM, Random forest classifier, AdaBoostClassifier <br>
             DATASET_FILENAME: Any file in ... "Data_Drug_Consumption/sub_data"
 COLLAPSE_TYPE: <br>
                0: None, use original classes <br>

@@ -3,20 +3,12 @@ import numpy as np
 import random
 from datetime import datetime
 import sys
-import clustering
-import DecisionTree
-import kNN
-import MPP
-import BPNN
-import MPP
-import PCA
-import FLD
-import SVM
 import csv
 import os
-import sys
-import performance
 
+import DecisionTree,clustering,kNN,MPP,BPNN,ABC,RFC,SVM
+import PCA,FLD
+import performance
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -150,6 +142,10 @@ def get_algorithim_name(algorithim):
         algorithim_name = 'MPP'
     elif algorithim.lower() == 'svm':
         algorithim_name = 'SVM'
+    elif algorithim.lower() == 'rfc':
+        algorithim_name = 'RFC'
+    elif algorithim.lower() == 'abc':
+        algorithim_name = 'ABC'
     else:
         eprint("\nERROR: Algorithim was not found\n");
         sys.exit();
@@ -219,7 +215,6 @@ def main():
     elif reduction_name.lower() == 'fld':
         X_train,X_test = FLD.run(X_train,y_train,X_test, graph_name=plot_name)
 
-    print (algorithim_name.lower())
     if algorithim_name.lower() == 'clustering':
         classifier,accuracy,precision,recall,f1,confusion_matrix = clustering.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
     elif algorithim_name.lower() == 'decisiontree':
@@ -237,6 +232,10 @@ def main():
         classifier,accuracy,precision,recall,f1,confusion_matrix = MPP.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
     elif algorithim_name.lower() == 'svm':
         classifier,accuracy,precision,recall,f1,confusion_matrix = SVM.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename,graph_name=plot_name);
+    elif algorithim_name.lower() == 'rfc':
+        classifier,accuracy,precision,recall,f1,confusion_matrix = RFC.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename,graph_name=plot_name);
+    elif algorithim_name.lower() == 'abc':
+        classifier,accuracy,precision,recall,f1,confusion_matrix = ABC.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename,graph_name=plot_name);
 
     np.set_printoptions(precision=3)
     # Not an error but allows run_experiments.sh to see this output

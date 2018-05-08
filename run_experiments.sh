@@ -10,7 +10,7 @@ for filename in ./Data_Drug_Consumption/sub_data/*.csv
 do
    for reduction_method in 'None' 'FLD' 'PCA'
    do
-      for algorithim_name in 'SVM'
+      for algorithim_name in 'Clustering' 'DecisionTree' 'kNN' 'BPNN' 'MPP' 'SVM' 'RFC' 'ABC'
       do
          for collapse_type in 0 1 2 3
          do

@@ -41,8 +41,8 @@ Params: REDUCTION_NAME ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5-11 : Personality Traits (Nscore, Escore, Oscore, Ascore, Cscore, Impulsive, sensation)  <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1   : All <br>
 
-VERBOSE: True or False
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True: Save predictions, plot as many graphs as applicable to config
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VERBOSE: True or False <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True: Save predictions, plot as many graphs as applicable to config
 
 Description:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Will run the specified configuration on the dataset using algorithm name    reduction type, collapseType, and columns to use. It will then print the results and append them to the "Results" directory. Optionally, true as the last parameter will save predictions to "Predictions" directory and show as many graphs as possible.

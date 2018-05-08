@@ -9,7 +9,7 @@ def run(X_train,y_train,X_test,graph_name=None,n_components=-1):
         n_components = next(x[0] for x in enumerate(np.cumsum(PCAobject.explained_variance_ratio_)) if x[1] > 0.90) + 1
         PCAobject = PCA(n_components=n_components).fit(X_train)
     else:
-        n_components = 2
+        n_components = 3
         PCAobject = PCA(n_components=n_components).fit(X_train)
 
     #Transform datasets

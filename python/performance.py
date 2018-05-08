@@ -53,7 +53,7 @@ def plot_reduction(data,class_values,filename):
             class_data = data[class_value==class_values]
             plt.scatter(class_data[:,0],class_data[:,1],color=colors[class_value],marker=markers[class_value],label=class_labels[class_value],s=50,alpha=.4)
 
-        plt.title(get_graph_name(filename))
+        plt.title(get_graph_name(filename),fontsize=24)
         plt.xlabel("PC1", fontsize=12)
         plt.ylabel("PC2", fontsize=12)
         plt.legend(ncol=10,bbox_to_anchor=[0.5, -0.135], loc='lower center')
@@ -66,10 +66,10 @@ def plot_reduction(data,class_values,filename):
             class_data = data[class_value==class_values]
             ax.scatter(class_data[:,0],class_data[:,1],class_data[:,2],color=colors[class_value],marker=markers[class_value],label=class_labels[class_value],s=50,alpha=.3)
 
-        plt.title(get_graph_name(filename))
-        ax.set_xlabel('PC1')
-        ax.set_ylabel('PC2')
-        ax.set_zlabel('PC3')
+        plt.title(get_graph_name(filename), fontsize=30)
+        ax.set_xlabel('PC1',fontsize=30)
+        ax.set_ylabel('PC2',fontsize=30)
+        ax.set_zlabel('PC3',fontsize=30)
         ax.legend(ncol=10,bbox_to_anchor=[0.5, -0.135], loc='lower center')
     else:
         print ("\nERROR: Cannot graph reduction because n_components it not 2 or 3\n")
@@ -87,7 +87,7 @@ def plot_roc(gs,X_test,y_test,filename):
     roc_auc = metrics.auc(fpr, tpr)
 
     plt.figure(filename)
-    plt.title(get_graph_name(filename))
+    plt.title(get_graph_name(filename),fontsize=15)
     plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
     plt.legend(loc = 'lower right')
     plt.plot([0, 1], [0, 1],'r--')

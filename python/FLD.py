@@ -1,15 +1,24 @@
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import numpy as np
+import performance
 
+def run(X_train,y_train,X_test,graph_name=None,n_components=-1):
+    if graph_name == None:
+        #Find optimal n components and retrain FLD
+        lda = LinearDiscriminantAnalysis().fit(X_train, y_train)
+        n_components = next(x[0] for x in enumerate(np.cumsum(lda.explained_variance_ratio_)) if x[1] > 0.90) + 1
+        lda = LinearDiscriminantAnalysis(n_components=n_components).fit(X_train, y_train)
+    else:
+        n_components = 2
+        lda = LinearDiscriminantAnalysis(n_components=n_components).fit(X_train, y_train)
 
-def run(X_train,y_train,X_test):
-    #Find optimal n components and retrain FLD
-    lda = LinearDiscriminantAnalysis().fit(X_train, y_train)
-    n_components = next(x[0] for x in enumerate(np.cumsum(lda.explained_variance_ratio_)) if x[1] > 0.90) + 1
-    lda = LinearDiscriminantAnalysis(n_components=n_components).fit(X_train, y_train)
     #Transform datasets
     fld_train = lda.transform(X_train)
     fld_test = lda.transform(X_test)
+
+    if graph_name != None:
+        performance.plot_reduction(fld_train,y_train,graph_name)
+
     return fld_train,fld_test
 
 if __name__ == "__main__":

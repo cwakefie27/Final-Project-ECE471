@@ -121,4 +121,4 @@ def run(X_train,y_train,X_test,y_test,predciction_filename=None):
     gs.fit(X_train,y_train)
     predicted_classes = gs.best_estimator_.predict(X_test)
 
-    return performance.get_results(gs,predicted_classes,y_test,predciction_filename)
+    return performance.get_scores(gs.best_params_,predicted_classes,y_test,predciction_filename)

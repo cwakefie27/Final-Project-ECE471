@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
+import performance
 import os
 
 START_SPACE = "     "
@@ -35,36 +36,6 @@ def build_confusion(prediction_list,classes):
         #increment confusion matrix count
         confusion_matrix[actual_class][predicted_class] += 1
     return confusion_matrix,unique_classes
-
-def print_confusion(confusion_matrix,class_labels):
-    #Get the size of the largest actual label and add 2 to get predicted size
-    actual_length =  np.array([len('Actual ' + str(label)) for label in class_labels]).max()
-    predicted_length = actual_length + 3
-    #ensure the predicted length is long enough to accomadate percent correct
-    if predicted_length < 17:
-        predicted_length = 17
-
-    #print predicted labels
-    print (START_SPACE + '{:{actual_width}}|'.format('',actual_width=actual_length+3)),
-    for label in class_labels:
-        print (' {:>{predicted_width}} |'.format('Predicted ' + str(label),predicted_width=predicted_length)),
-    print ("")
-
-    #print confusion matrix
-    for row_index,row in enumerate(zip(confusion_matrix,class_labels)):
-        #print actual label
-        print (START_SPACE + '| {:{actual_width}} |'.format('Actual ' + str(row[1]),actual_width=actual_length)),
-        #print each instance in the confusion matrix
-        for col_index,instance in enumerate(row[0]):
-            print (' {:{predicted_width}} |'.format(int(instance),predicted_width=predicted_length)),
-        #print the percent correct per row aka actual percent correct
-        print ('{:.3f} % correct'.format((row[0][row_index] / float(sum(row[0])))*100))
-
-    #print the percent correct per column aka predicted percent correct
-    print (START_SPACE + '{:{actual_width}}|'.format('',actual_width=actual_length+3)),
-    for col_index in range(0,len(confusion_matrix)):
-        print (' {:>{predicted_width}.3f} % correct |'.format((confusion_matrix[col_index][col_index] / max(1,float(sum(confusion_matrix[:,col_index]))))*100,predicted_width=int(predicted_length-10))),
-    print ("")
 
 def print_stats(predicted_list,actual_list):
     accuracy = accuracy_score(predicted_list,actual_list);
@@ -109,6 +80,11 @@ def main():
         print ("USAGE: python fusion.py first_predictions.csv second_predictions.csv")
         sys.exit()
 
+    if len(sys.argv) > 3 and sys.argv[3].lower()[0] == 't':
+        PLOT = True
+    else:
+        PLOT = False
+
     #Read file including the header
     with open(FIRST_PREDICTIONS,'r') as file:
         first_header = file.readline().strip()
@@ -137,13 +113,13 @@ def main():
     print (first_header)
     print_stats(first_prediction_list[:,0],first_prediction_list[:,1])
     print ("")
-    print_confusion(first_confusion_matrix,class_labels)
+    performance.print_confusion(first_confusion_matrix,class_labels)
     print ("")
     print ("*** Second Classifier Information *** ")
     print (second_header)
     print_stats(second_prediction_list[:,0],first_prediction_list[:,1])
     print ("")
-    print_confusion(second_confusion_matrix,class_labels)
+    performance.print_confusion(second_confusion_matrix,class_labels)
     print ("")
 
     #Get the percent likelihood of each index being picked
@@ -159,9 +135,9 @@ def main():
 
     print ("*** Fused Classifier Information ***")
     print_stats(fused_prediction_list[:,0],fused_prediction_list[:,1])
-    print
-    print_confusion(fused_confusion_matrix,class_labels)
-    print
+    print ("")
+    performance.print_confusion(fused_confusion_matrix,class_labels)
+    print ("")
 
 if __name__ == "__main__":
 	main()

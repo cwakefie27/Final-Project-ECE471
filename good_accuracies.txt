@@ -1,2 +1,0 @@
-1.	python3 python/runner.py knn Data_Drug_Consumption/sub_data/niccotine.csv 1 3,7,8,9,11,12
-	Has an accuracy of 99.69 with a kvalue of 5 and minkowski_p of 1

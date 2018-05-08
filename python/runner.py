@@ -14,6 +14,8 @@ import FLD
 import csv
 import os
 import sys
+import performance
+
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -167,9 +169,9 @@ def main():
 
     if len(sys.argv) > 6 and sys.argv[6][0].lower() == 't':
         random.seed(1)
-        save_predictions = True
+        save_predictions_plot = True
     else:
-        save_predictions = False
+        save_predictions_plot = False
 
     if not ((0 <= collapseType <= 3)):
         eprint("\nERROR: Collapse type must be between 0-3\n")
@@ -193,10 +195,14 @@ def main():
     loadDataset(filename,split,cols,X_train,y_train,X_test,y_test);
     collapseClassifications(collapseType,y_train,y_test);
 
-    if save_predictions == True:
-        random.seed(datetime.now())
+    #reseed the generatior after a split
+    random.seed(datetime.now())
+
+    if save_predictions_plot == True:
         predictions_filename = generate_predictions_filename(drug_name,reduction_name,algorithim_name,collapseType,cols)
+        plot_name = predictions_filename
     else:
+        plot_name = None
         predictions_filename = None
 
     print("\nRunning algorithim... ");
@@ -205,32 +211,41 @@ def main():
     print("\tCollapse Type : " + str(collapseType))
     print("\tColumns Used  : " + str(cols))
 
-
     if reduction_name.lower() == 'pca':
-        X_train,X_test = PCA.run(X_train,X_test)
+        X_train,X_test = PCA.run(X_train,y_train,X_test, graph_name=plot_name)
     elif reduction_name.lower() == 'fld':
-        X_train,X_test = FLD.run(X_train,y_train,X_test)
+        X_train,X_test = FLD.run(X_train,y_train,X_test, graph_name=plot_name)
 
     if algorithim_name.lower() == 'clustering':
-        accuracy,classifier,confusion_matrix,precision,recall,f1 = clustering.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
+        classifier,accuracy,precision,recall,f1,confusion_matrix = clustering.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
     elif algorithim_name.lower() == 'decisiontree':
-        save_decision_tree = False
-        if save_decision_tree == True and reduction_name == 'None' and len(cols) == 1 and cols[0] == -1:
-            save_decision_tree = True
+        if (reduction_name =='None' and len(cols) == 1 and cols[0] == -1):
+            plot_name = drug_name
         else:
-            save_decision_tree = False
-        accuracy,classifier,confusion_matrix,precision,recall,f1 = DecisionTree.run(X_train,y_train,X_test,y_test,outputGraph=save_decision_tree,collapseType=collapseType,predciction_filename=predictions_filename);
+            plot_name = None
+            print ("\nERROR: Could not save DT because you either reduced the data or did not inculde all features")
+        classifier,accuracy,precision,recall,f1,confusion_matrix = DecisionTree.run(X_train,y_train,X_test,y_test,collapseType=collapseType,predciction_filename=predictions_filename,graph_name=plot_name);
     elif algorithim_name.lower() == 'knn':
-        accuracy,classifier,confusion_matrix,precision,recall,f1 = kNN.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
+        classifier,accuracy,precision,recall,f1,confusion_matrix = kNN.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename,graph_name=plot_name);
     elif algorithim_name.lower() == 'bpnn':
-        accuracy,classifier,confusion_matrix,precision,recall,f1 = BPNN.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
+        classifier,accuracy,precision,recall,f1,confusion_matrix = BPNN.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename,graph_name=plot_name)
     elif algorithim_name.lower()  == 'mpp':
-        accuracy,classifier,confusion_matrix,precision,recall,f1 = MPP.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
+        classifier,accuracy,precision,recall,f1,confusion_matrix = MPP.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
 
+    np.set_printoptions(precision=3)
     # Not an error but allows run_experiments.sh to see this output
-    eprint('\nAccuracy         : {}'.format(accuracy))
-    eprint('Best Parameters  :  {}\n'.format(classifier))
-    print('Confusion Matrix : \n{}\n'.format(confusion_matrix))
+    eprint('\nBest Parameters : {0}'.format(classifier))
+    eprint('\tAccuracy         : {0:0.3f}'.format(accuracy*100))
+    print( '\tPrecision        : {0:0.3f}'.format(precision*100))
+    print( '\tRecall           : {0:0.3f}'.format(recall*100))
+    print( '\tF1 Score         : {0:0.3f}'.format(f1*100))
+    print( '\tConfusion Matrix : \n'.format())
+    if collapseType == 0:
+        print( '{0}'.format(confusion_matrix))
+    else:
+        performance.print_confusion(confusion_matrix,performance.get_class_labels(collapseType))
+    #ePrint for script purposes
+    eprint('')
 
 	#Append results
     directory = "Results";

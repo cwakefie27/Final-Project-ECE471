@@ -1,10 +1,9 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn import metrics
 import numpy as np
 import performance
 
-def run(X_train,y_train,X_test,y_test,predciction_filename=None):
+def run(X_train,y_train,X_test,y_test,predciction_filename=None,graph_name=None):
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     param_grid ={
                     'activation' : ['identity', 'logistic', 'tanh'],
@@ -18,22 +17,7 @@ def run(X_train,y_train,X_test,y_test,predciction_filename=None):
     gs.fit(X_train,y_train)
     predicted_classes = gs.best_estimator_.predict(X_test)
 
-    # calculate the fpr and tpr for all thresholds of the classification
-    probs = gs.predict_proba(X_test)
-    preds = probs[:,1]
-    fpr, tpr, threshold = metrics.roc_curve(y_test, preds)
-    roc_auc = metrics.auc(fpr, tpr)
+    if graph_name != None:
+        performance.plot_roc(gs,X_test,y_test,graph_name)
 
-    # method I: plt
-    import matplotlib.pyplot as plt
-    plt.title('Receiver Operating Characteristic')
-    plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
-    plt.legend(loc = 'lower right')
-    plt.plot([0, 1], [0, 1],'r--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.ylabel('True Positive Rate')
-    plt.xlabel('False Positive Rate')
-    plt.show()
-
-    return performance.get_results(gs,predicted_classes,y_test,predciction_filename)
+    return performance.get_scores(gs.best_params_,predicted_classes,y_test,predciction_filename)

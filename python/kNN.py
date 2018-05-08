@@ -65,7 +65,7 @@ class kNNClassifier(BaseEstimator, ClassifierMixin):
         predicted_X = self.predict(X)
         return accuracy_score(predicted_X,y)
 
-def run(X_train,y_train,X_test,y_test,predciction_filename=None):
+def run(X_train,y_train,X_test,y_test,predciction_filename=None,graph_name=None):
 
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     param_grid = {
@@ -76,6 +76,7 @@ def run(X_train,y_train,X_test,y_test,predciction_filename=None):
     gs.fit(X_train,y_train)
     predicted_classes = gs.best_estimator_.predict(X_test)
 
-    
+    if graph_name != None:
+        performance.plot_roc(gs,X_test,y_test,graph_name)
 
-    return performance.get_results(gs,predicted_classes,y_test,predciction_filename)
+    return performance.get_scores(gs.best_params_,predicted_classes,y_test,predciction_filename)

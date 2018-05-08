@@ -90,7 +90,7 @@ def run(X_train,y_train,X_test,y_test,predciction_filename=None):
     if (len(X_train[0])) == 1:
         eprint("\nERROR: MPP number of dimensions is equal to 1\n")
         sys.exit()
-        
+
     #Find the best parameters using GridSearchCV -- SPECIFY param_grid
     param_grid = {
                     'case':[1,2,3],
@@ -99,4 +99,4 @@ def run(X_train,y_train,X_test,y_test,predciction_filename=None):
     gs.fit(X_train,y_train)
     predicted_classes = gs.best_estimator_.predict(X_test)
 
-    return performance.get_results(gs,predicted_classes,y_test,predciction_filename)
+    return performance.get_scores(gs.best_params_,predicted_classes,y_test,predciction_filename)

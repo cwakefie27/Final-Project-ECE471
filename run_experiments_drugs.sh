@@ -22,8 +22,8 @@ do
                echo " -- Algorithim     : " $algorithim_name
                echo " -- Collapse Type  : " $collapse_type
                echo " -- Columns to Use : " $columns_to_use
-               # python python/runner.py $algorithim_name Data_Drug_Consumption/sub_data/$filename $collapse_type $columns_to_use > /dev/null
-               python3 python/runner.py $reduction_method $algorithim_name $filename $collapse_type $columns_to_use > /dev/null
+
+               python python/runner.py $reduction_method $algorithim_name $filename $collapse_type $columns_to_use > /dev/null
             done
          done
       done

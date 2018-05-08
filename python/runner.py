@@ -214,7 +214,8 @@ def main():
     if algorithim_name.lower() == 'clustering':
         accuracy,classifier,confusion_matrix,precision,recall,f1 = clustering.run(X_train,y_train,X_test,y_test,predciction_filename=predictions_filename);
     elif algorithim_name.lower() == 'decisiontree':
-        if reduction_name == 'None' and len(cols) == 1 and cols[0] == -1:
+        save_decision_tree = False
+        if save_decision_tree == True and reduction_name == 'None' and len(cols) == 1 and cols[0] == -1:
             save_decision_tree = True
         else:
             save_decision_tree = False

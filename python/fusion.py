@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
+import os
 
 START_SPACE = "     "
 
@@ -104,9 +105,8 @@ def main():
     try:
         FIRST_PREDICTIONS = sys.argv[1]
         SECOND_PREDICTIONS  = sys.argv[2]
-        COLLAPSE_TYPE = int(sys.argv[3])
     except IndexError as e:
-        print ("USAGE: python fusion.py first_predictions.csv second_predictions.csv collapseType")
+        print ("USAGE: python fusion.py first_predictions.csv second_predictions.csv")
         sys.exit()
 
     #Read file including the header
@@ -119,6 +119,9 @@ def main():
         second_header = file.readline().strip()
         second_prediction_list = np.array(pd.read_csv(file, error_bad_lines=False, header=None,comment='#'))
     file.closed
+
+    COLLAPSE_TYPE = int(os.path.basename(FIRST_PREDICTIONS).split('_')[3])
+    assert (COLLAPSE_TYPE == int(os.path.basename(SECOND_PREDICTIONS).split('_')[3])), "Collapse types must be the same"
 
     #Get all classes in both files and the actual classes
     all_classes = np.unique(np.concatenate([first_prediction_list,second_prediction_list]))

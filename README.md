@@ -2,37 +2,35 @@
 
 The goal of this project is to use various machine learning algorithms to classify the below dataset. 10 fold cross validation is used to determine the best parameters and results are gathered on unseen data.
 # Links:
-   Dataset:<br>
-   http://archive.ics.uci.edu/ml/datasets/Drug+consumption+%28quantified%29  
+Dataset:<br>
+http://archive.ics.uci.edu/ml/datasets/Drug+consumption+%28quantified%29  
 
-   Results.csv:<br>
-   https://docs.google.com/spreadsheets/d/1E3bBgM-ivO9hUzD8B0ikVWiMWTvuq05GDoG59lepFuY/edit?usp=sharing
+Results.csv:<br>
+https://docs.google.com/spreadsheets/d/1E3bBgM-ivO9hUzD8B0ikVWiMWTvuq05GDoG59lepFuY/edit?usp=sharing
 
-   Report:  
+Report:<br>
 https://docs.google.com/document/d/1GISlAoKiMtV66OsgX6d8238h52S9VA8Tq2iWwKQgYVI/edit?usp=sharing  
 
-   Powerpoint:  
+Powerpoint:<br>
 https://docs.google.com/presentation/d/1lzonRb6BPj5XVkpVQKUBtOgfzcfdzW76sOFiuFKhsEc/edit?usp=sharing
 
 # Datasets:
 
-   Data_Drug_Consumption/sub_data/:  
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All data used in experiments. Each file contains a particular drug, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;its features and classification. This was created by stripping it from the original dataset.
+Data_Drug_Consumption/sub_data/:  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All data used in experiments. Each file contains a particular drug, its features and classification. This was created by stripping it from the original dataset.
 
 Features:  
-Personality measurements which include NEO-FFI-R (neuroticism, extraversion, openness to experience, agreeableness, and conscientiousness), BIS-11 (impulsivity), and ImpSS (sensation seeking), level of education, age, gender, country of residence and ethnicity.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Personality measurements which include NEO-FFI-R (neuroticism, extraversion, openness to experience, agreeableness, and conscientiousness), BIS-11 (impulsivity), and ImpSS (sensation seeking), level of education, age, gender, country of residence and ethnicity.
 
 Class Labels:  
-"Never Used", "Used over a Decade Ago", "Used in Last Decade", "Used in Last Year", "Used in Last Month", "Used in Last Week", and "Used in Last Day".
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Never Used", "Used over a Decade Ago", "Used in Last Decade", "Used in Last Year", "Used in Last Month", "Used in Last Week", and "Used in Last Day".
 
 # Runner.py:
 
-
-Params:  
-         REDUCTION_NAME ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE  
-            REDUCTION_NAME: PCA, FLD, None  
-            ALGORITHIM_NAME: BPNN, clustering (WTA and kMeans), DecisionTree, kNN, MPP (case1,2,3), SVM, Random forest classifier, AdaBoostClassifier <br>
-            DATASET_FILENAME: Any file in ... "Data_Drug_Consumption/sub_data"
+Params: REDUCTION_NAME ALGORITHIM_NAME DATASET_FILENAME COLLAPSE_TYPE COLUMNS_TO_USE (Optional) Verbose<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REDUCTION_NAME: PCA, FLD, None  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALGORITHIM_NAME: BPNN, clustering (WTA and kMeans), DecisionTree, kNN, MPP (case1,2,3), SVM, Random forest classifier, AdaBoostClassifier <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATASET_FILENAME: Any file in ... "Data_Drug_Consumption/sub_data"
 COLLAPSE_TYPE: <br>
                0: None, use original classes <br>
                1: Collapse to 2 classes. (0: Never used, 1: Used at somepoint)  <br>

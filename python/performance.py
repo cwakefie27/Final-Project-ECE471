@@ -46,7 +46,18 @@ def plot_reduction(data,class_values,filename):
     colors_classes = [colors[class_value] for class_value in class_values]
     markers_classes = [markers[class_value] for class_value in class_values]
 
-    if len(data[0]) == 2:
+    if len(data[0]) == 1:
+        plt.figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
+
+        for i,class_value in enumerate(np.unique(class_values)):
+            class_data = data[class_value==class_values]
+            plt.scatter(class_data[:,0],[i] * len(class_data[:,0]),color=colors[class_value],marker=markers[class_value],label=class_labels[class_value],s=50,alpha=.4)
+
+        plt.title(get_graph_name(filename),fontsize=24)
+        plt.xlabel("PC1", fontsize=12)
+        plt.ylabel("PC1", fontsize=12)
+        plt.legend(ncol=10,bbox_to_anchor=[0.5, -0.135], loc='lower center')
+    elif len(data[0]) == 2:
         plt.figure(num=None, figsize=(10, 8), dpi=80, facecolor='w', edgecolor='k')
 
         for class_value in np.unique(class_values):
